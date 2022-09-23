@@ -1,0 +1,11 @@
+MeuAFD
+S: q0,q1,q2,q3
+A: a,b
+i: q0
+F: q2,q3
+(q0,a,q1)
+(q0,b,q3)
+(q1,a,q2)
+(q1,b,q1)
+(q2,a,q2)
+(q3,b,q2)

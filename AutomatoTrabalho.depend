@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1663896163 source:c:\users\bnero\desktop\projetos e atividades ufrgs\3º semestre\linguagens foramis e autômatos finitos\automatotrabalho\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<sstream>
+	<vector>
+	<unordered_map>
+	<list>
+	<algorithm>
+
