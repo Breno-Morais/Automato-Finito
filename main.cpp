@@ -230,17 +230,40 @@ class AFD
             }
 
             // Analisa os pares de estados que ainda não foram marcados, e verifica se são equivalentes
-            for(unsigned int i = 0; i<EstadosAlcancaveis.size()-1; i++)
+            bool flag = true;
+            while(flag)
             {
-                for(unsigned int j = 0; j<=i; j++)
+                flag = false;
+
+                for(unsigned int i = 0; i<EstadosAlcancaveis.size()-1; i++)
                 {
-                    string p = EstadosAlcancaveis[j];
-                    string q = EstadosAlcancaveis[i+1];
+                    for(unsigned int j = 0; j<=i; j++)
+                    {
+                        string p = EstadosAlcancaveis[j];
+                        string q = EstadosAlcancaveis[i+1];
 
-                    if(TabelaS(p,q)[0] == "X")
-                        continue;
+                        if(TabelaS(p,q)[0] == "X")
+                            continue;
 
-                    VerificaPar(p,q);
+                        //VerificaPar(p,q);
+
+                        for(char c: A)
+                        {
+                            string r = T[p][c];
+                            string s = T[q][c];
+
+                            if(r == s) continue;
+
+                            bool marcado;
+                            if(TabelaS(r,s)[0] == "X") marcado = true;
+                            else marcado = false;
+
+                            flag = flag || marcado;
+                            TabelaS(p,q)[0] = TabelaS(r,s)[0];
+
+                            if(marcado) break;
+                        }
+                    }
                 }
             }
 
@@ -512,16 +535,23 @@ class AFD
 
             if(!Vazia) return;
 
+            if((std::find(F.begin(), F.end(), e) != F.end()) && Vazia)
+            {
+                std::cout << "Linguagem nao vazia!" << std::endl;
+                Vazia = false;
+                return;
+            }
+
             for(char c: A)
             {
                 string temp;
                 try{
                     temp = T.at(e).at(c);
                 } catch (const std::out_of_range& e){
-                    return;
+                    continue;
                 }
 
-                if(visitados[temp]) return;
+                if(visitados[temp]) continue;
 
                 // Se a transição leva a um estado final, sinaliza que a linguagem reconhecida não é vazia
                 if((std::find(F.begin(), F.end(), temp) != F.end()) && Vazia)
