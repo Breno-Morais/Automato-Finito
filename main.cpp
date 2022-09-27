@@ -352,18 +352,22 @@ class AFD
             M = M + " Minimizado";
 
             // Remover as transições para estados não existentes----------------------------------------------------------
-            unordered_map<string, char> A_Remover;
+            unordered_map<string, vector<char>> A_Remover;
             for(auto& i: T)
             {
                 for(auto& j: i.second)
                 {
-                    if(j.second == "") A_Remover[i.first] = j.first;
+                    if(j.second == "") A_Remover[i.first].push_back(j.first);
                 }
             }
 
             for(auto& i: A_Remover)
             {
-                T[i.first].erase(i.second);
+                for(char c: i.second)
+                {
+                    cout << i.first << ',' << c << endl;
+                    T[i.first].erase(c);
+                }
             }
 
             A_Remover.clear();
