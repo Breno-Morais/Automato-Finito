@@ -583,6 +583,8 @@ int main()
     cin >> arq_entrada;
     myAFD.AnalisaLista(WordsFile(arq_entrada));
 
+    cout << endl << "Escreva algo e de Enter pra sair" << endl;
+    cin >> arq_entrada;
     return 0;
 }
 
