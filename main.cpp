@@ -1,3 +1,5 @@
+// Breno Morais 335794 e Henrique Gobbi 334932
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,13 +43,13 @@ class AFD
         vector<char> A; // Alfabeto do AFD
         string i; // Estado inicial
         vector<string> F; // Conjunto dos estados finais do AFD
-        unordered_map<string, unordered_map<char, string>> T; // Tabela de Transição do AFD (Recebe um Estado e um Simbolo, retorna um Estado)
+        unordered_map<string, unordered_map<char, string>> T; // Tabela de TransiÃ§Ã£o do AFD (Recebe um Estado e um Simbolo, retorna um Estado)
 
         string EA; // Estado Atual do AFD
 
-        // Função de Inicialização
-        // Além de atribuir os elementos do AFD, como alfabetos, estados, etc. O minimaliza e mostra se
-        // a linguagem reconhecida pelo AFD é vazia ou não
+        // FunÃ§Ã£oo de InicializaÃ§Ã£o
+        // AlÃ©m de atribuir os elementos do AFD, como alfabetos, estados, etc. O minimaliza e mostra se
+        // a linguagem reconhecida pelo AFD Ã© vazia ou nÃ£o
         AFD(string NomeM, vector<string> estadosS, vector<char> alfabetosA, string estadoI, vector<string> estadosF, unordered_map<string, unordered_map<char, string>> TabelaEntrada)
         {
             M = NomeM;
@@ -70,18 +72,18 @@ class AFD
             LinguagemVazia();
         }
 
-        // Analisa uma palavra, retorna se a palavra é aceitada ou rejeitada
+        // Analisa uma palavra, retorna se a palavra Ã© aceitada ou rejeitada
         void AnalisaPalavra(string palavra)
         {
-            // Analisa letra por letra da palavra, fazendo as transições correspondentes
+            // Analisa letra por letra da palavra, fazendo as transiÃ§Ãµes correspondentes
             for(char c: palavra)
             {
                 Transicao(c);
 
-                if(Situacao == -2) break; // Se uma ultima transição for indefinido, para de analisar a palavra
+                if(Situacao == -2) break; // Se uma ultima transiÃ§Ã£o for indefinido, para de analisar a palavra
             }
 
-            Transicao(char(0)); // Transição da Palavra Vazia
+            Transicao(char(0)); // TransiÃ§Ã£o da Palavra Vazia
 
             EA = i; // Reinicializa o estado atual para o inicial
 
@@ -100,69 +102,66 @@ class AFD
 
     private:
         int Situacao = 0; /*
-                        Situação final do AFD
-                        Situacao = 0; AFD não acabou
+                        SituaÃ§Ã£o final do AFD
+                        Situacao = 0; AFD nÃ£o acabou
                         Situacao = 1; AFD acabou e aceitou
                         Situacao = -1; AFD acabou e rejeitou
-                        Situacao = -2; AFD não acabou mas Transição Indefinida
+                        Situacao = -2; AFD nÃ£o acabou mas TransiÃ§Ã£o Indefinida
                         */
 
-        vector<string> EstadosAlcancaveis; // Lista de estados alcançaveis, a partir do estado inicial
-        vector<string> In_Estados_Al; // Lista de estados alcançaveis, a partir de um estado
-                                      // Usado para saber se um estado é inútil ou não
+        vector<string> EstadosAlcancaveis; // Lista de estados alcanÃ§Ã¡veis, a partir do estado inicial
+        vector<string> In_Estados_Al; // Lista de estados alcanÃ§Ã¡veis, a partir de um estado
+                                      // Usado para saber se um estado Ã© inÃºtil ou nÃ£o
 
         unordered_map<string, unordered_map<string, vector<string> > > TabelaE;
-            // Tabela de equivalência
-            /* Dado um par de estados, retorna um vetor de strings em que o primeiro elemento representa se aquele par é
-               equivalente ou não, os outros elementos do vetor são os pares que são dependentes.
+            // Tabela de equivalÃªncia
+            /* Dado um par de estados, retorna um vetor de strings em que o primeiro elemento representa se aquele par Ã©
+               equivalente ou nÃ£o, os outros elementos do vetor sÃ£o os pares que sÃ£o dependentes.
             */
 
-        vector<string> emptyVector = {"X"}; // Vetor usado quando um par não é definido
+        vector<string> emptyVector = {"X"}; // Vetor usado quando um par nÃ£o Ã© definido
 
         // Variaveis de Controle do teste de linguagem vazia
         unordered_map<string, bool> visitados; // Dado um estado, retorna se aquele estado foi visitado
-        bool Vazia = true; // Se a linguagem é vazia
+        bool Vazia = true; // Se a linguagem Ã© vazia
 
-        // Função que faz uma transição do estado atual, dado um símbolo
+        // FunÃ§Ã£o que faz uma transiÃ§Ã£o do estado atual, dado um sÃ­mbolo
         void Transicao(char c)
         {
-            // Existe uma forma mais compacta mas c++ é uma linguagem horrível e fica dando problema
-            // TESTA SE ENTRADA É VÁLIDA
-
-                // Verifica se quando a palavra acaba, o estado atual é final ou não
+            // Testa se entrada Ã© vÃ¡lida
+                // Verifica se quando a palavra acaba, o estado atual Ã© final ou nÃ£o
                 if(int(c) == 0)
                 {
-                    if(Situacao == -2) return; // Se tiver acabado por transição indefina, retorna
+                    if(Situacao == -2) return; // Se tiver acabado por transiÃ§Ã£o indefina, retorna
 
-                    if (std::find(F.begin(), F.end(), EA) != F.end()) // Se o estado é final
+                    if (std::find(F.begin(), F.end(), EA) != F.end()) // Se o estado Ã© final
                         Situacao = 1;
-                    else // Ou não
+                    else // Ou nÃ£o
                         Situacao = -1;
                     return;
                 }
 
                 Situacao = -2;
-                // Tenta encontrar se o símbolo faz parte do alfabeto, existe um jeito melhor, talvez implemente depois
+                // Tenta encontrar se o sÃ­mbolo faz parte do alfabeto
                 for(char x: A){
                     if(x == c)
                     {
-                        Situacao = 0; // Se for um símbolo válido, continua
+                        Situacao = 0; // Se for um sï¿½mbolo vï¿½lido, continua
                         break;
                     }
                 }
 
                 if(Situacao == -2) return;
-            // ACABOU O TESTE :)
 
-
-            try{
-                EA = T.at(EA).at(c); // Tenta fazer a transição
+            try
+            {
+                EA = T.at(EA).at(c); // Tenta fazer a transiÃ§Ã£o
             } catch (const std::out_of_range& e){
-                Situacao = -1; // Se não der certo, retorna que a palavra não é aceita
+                Situacao = -1; // Se nÃ£o der certo, retorna que a palavra nÃ£o Ã© aceita
             }
         }
 
-        // Imprime as informações essenciais do AFD
+        // Imprime as informaÃ§Ãµes essenciais do AFD
         void EstadoAtual()
         {
             std::cout << "Nome AFD: " << M << endl;
@@ -184,11 +183,11 @@ class AFD
         void Minimizacao()
         {
 //----------Requisitos------------------------------------------------------------------------------------
-            // Função Total
+            // FunÃ§Ã£o Total
             string dump = "dumping";
             EstadosAlcancaveis.push_back(dump);
 
-            // Transforma todas as transições indefinidas para o estado de lixo dump
+            // Transforma todas as transiÃ§Ãµes indefinidas para o estado de lixo dump
             for(string q: EstadosAlcancaveis)
             {
                 for(char c: A)
@@ -201,20 +200,20 @@ class AFD
                 }
             }
 
-            // Somente Estados Alcançaveis
-            ApenasAlcancaveis(i); // Atualiza os Estados Alcançaveis a partir do estado inicial
+            // Somente Estados AlcanÃ§Ã¡veis
+            ApenasAlcancaveis(i); // Atualiza os Estados AlcanÃ§Ã¡veis a partir do estado inicial
 
-            // Passa por todos os estado do AFD, e não for Alcançavel, o exclui
+            // Passa por todos os estado do AFD, se nÃ£o for AlcanÃ§Ã¡vel, o exclui
             for(string Estado: S)
                 if(std::find(EstadosAlcancaveis.begin(), EstadosAlcancaveis.end(), Estado) == EstadosAlcancaveis.end())
                     Remove_Estado(Estado);
 
-//----------Etapas da Minimização-------------------------------------------------------------------------
-            // Teste de equivalência de estados-----------------------------------------------------------
+//----------Etapas da MinimizaÃ§Ã£o-------------------------------------------------------------------------
+            // Teste de equivalÃªncia de estados-----------------------------------------------------------
 
                 //Inicializar a Tabela;
-                // Vai por toda a tabela de equivalência e verifica se o par são ambos do conjuntos dos finais,
-                // e um for e o outro não, ele marca com um X
+                // Vai por toda a tabela de equivalÃªncia e verifica se os pares sÃ£o ambos do conjuntos dos finais,
+                // se um for e o outro nÃ£o, ele marca com um X
             for(unsigned int i = 0; i<EstadosAlcancaveis.size()-1; i++)
             {
                 for(unsigned int j = 0; j<=i; j++)
@@ -229,7 +228,7 @@ class AFD
                 }
             }
 
-            // Analisa os pares de estados que ainda não foram marcados, e verifica se são equivalentes
+            // Analisa os pares de estados que ainda nÃ£o foram marcados, e verifica se sÃ£o equivalentes
             bool flag = true;
             while(flag)
             {
@@ -267,12 +266,12 @@ class AFD
                 }
             }
 
-            // Unificação de estados equivalentes----------------------------------------------------------
+            // UnificaÃ§Ã£o de estados equivalentes----------------------------------------------------------
             vector<string> Removidos;
             vector<string> Unidos;
 
-            // Se depois da verifição, alguma par de estados ainda não tenham sido marcados
-            // significa que são equivalentes, portanto podem ser unificados
+            // Se depois da verifiÃ§Ã£o, alguma par de estados ainda nÃ£o tenham sido marcados
+            // significa que sÃ£o equivalentes, portanto podem ser unificados
             for(unsigned int ic = 0; ic<EstadosAlcancaveis.size()-1; ic++)
             {
                 for(unsigned int j = 0; j<=ic; j++)
@@ -284,17 +283,17 @@ class AFD
 
                     string pq = p + q; // Cria um novo estado a partir das partes
 
-                    // Cria todas suas transições baseadas em uma de suas parte, qual parte é não importa, pois são equivalentes
+                    // Cria todas suas transiÃ§Ãµes baseadas em uma de suas parte, qual parte Ã© nÃ£o importa, pois sÃ£o equivalentes
                     for(char a: A)
                         T[pq][a] = T[p][a];
 
-                    // Passa por todas as transições, e qualquer transições que seja direcionada a alguma das partes é redirecionada
+                    // Passa por todas as transiÃ§Ãµes, e qualquer transiÃ§Ã£o que seja direcionada a alguma das partes Ã© redirecionada
                     // para o estado unificado
                     for(auto& i: T)
                         for(auto& j: i.second)
                             if(j.second == p || j.second == q) j.second = pq;
 
-                    // Se uma das partes for o estado inicial, faz com que o estado unificado seja também
+                    // Se uma das partes for o estado inicial, faz com que o estado unificado seja tambÃ©m
                     if(p == i || q == i)
                     {
                         i = pq;
@@ -305,7 +304,7 @@ class AFD
                     Removidos.push_back(p);
                     Removidos.push_back(q);
 
-                    // Se uma das partes for um estado final, o estado unificado será também
+                    // Se uma das partes for um estado final, o estado unificado serÃ¡ tambÃ©m
                     if(std::find(F.begin(), F.end(), p) != F.end() || std::find(F.begin(), F.end(), q) != F.end())
                         F.push_back(pq);
                 }
@@ -324,8 +323,8 @@ class AFD
             // Adiciona os estados unificados
             EstadosAlcancaveis.insert( EstadosAlcancaveis.end(), Unidos.begin(), Unidos.end() );
 
-            // Exclusão de estado inúteis----------------------------------------------------------
-            Removidos.clear(); // Vou reutilizar o Removidos para guardar os estado inuteis
+            // ExclusÃ£o de estado inÃºteis----------------------------------------------------------
+            Removidos.clear(); // Reutilizando o Removidos para guardar os estado inuteis
                 // Ir para cada estado
             for(string Estado: EstadosAlcancaveis)
             {
@@ -335,7 +334,7 @@ class AFD
                 In_Estados_Al.clear();
                 ApenasInuteis(Estado);
 
-                //  Verificar se algum estado alcançavei por ele é final
+                //  Verificar se algum estado alcanÃ§Ã¡vel por ele Ã© final
                 for(string Estado2: In_Estados_Al)
                     if(std::find(F.begin(), F.end(), Estado2) != F.end()) Inutil = false;
 
@@ -347,11 +346,11 @@ class AFD
             for(string Estado: Removidos)
                 Remove_Estado(Estado);
 
-            // Construção do AF minimizado
+            // ConstruÃ§Ã£o do AF minimizado
             S = EstadosAlcancaveis;
             M = M + " Minimizado";
 
-            // Remover as transições para estados não existentes----------------------------------------------------------
+            // Remover as transiÃ§Ãµes para estados nÃ£o existentes----------------------------------------------------------
             unordered_map<string, vector<char>> A_Remover;
             for(auto& i: T)
             {
@@ -373,12 +372,12 @@ class AFD
             A_Remover.clear();
         }
 
-        // Passa por todos os estados alcançáveis a partir do Estado, e os guarda no vetor EstadosAlcancaveis
+        // Passa por todos os estados alcanÃ§Ã¡veis a partir do Estado, e os guarda no vetor EstadosAlcancaveis
         void ApenasAlcancaveis(string Estado)
         {
-            // Se o Estado já foi visitado, para
+            // Se o Estado jÃ¡ foi visitado, para
             if(find(EstadosAlcancaveis.begin(), EstadosAlcancaveis.end(), Estado) != EstadosAlcancaveis.end()) return;
-            EstadosAlcancaveis.push_back(Estado); // Se não, adiciona na lista de estados alcançáveis
+            EstadosAlcancaveis.push_back(Estado); // Se nÃ£o, adiciona na lista de estados alcanÃ§Ã¡veis
 
             // Remove Duplicatas
             vector<string>::iterator ip;
@@ -386,7 +385,7 @@ class AFD
             EstadosAlcancaveis.resize(std::distance(EstadosAlcancaveis.begin(), ip));
             string temp;
 
-            // Repete os mesmo processo para os estados alcançaveis
+            // Repete os mesmo processo para os estados alcanÃ§Ã¡veis
             for(char a: A)
             {
                 try{
@@ -398,20 +397,20 @@ class AFD
             }
         }
 
-        // E o mesmo processo do ApenasAlcancaveis, a única diferença é que guarda os estados alcançáveis no vetor In_Estados_Al
-        // Para a exclusão dos estados Inuteis
+        // Mesmo processo do ApenasAlcancaveis, a Ãºnica diferenÃ§a Ã© que guarda os estados alcanÃ§Ã¡veis no vetor In_Estados_Al
+        // Para a exclusÃ£o dos estados Inuteis
         void ApenasInuteis(string Estado)
         {
-            // Se o Estado já foi visitado, para
+            // Se o Estado jÃ¡ foi visitado, para
             if(find(In_Estados_Al.begin(), In_Estados_Al.end(), Estado) != In_Estados_Al.end()) return;
-            In_Estados_Al.push_back(Estado); // Se não, adiciona na lista de estados alcançáveis
+            In_Estados_Al.push_back(Estado); // Se nÃ£o, adiciona na lista de estados alcanÃ§Ã¡veis
 
-            // Remove Duplicatas
+            // Remove Duplicadas
             vector<string>::iterator ip;
             ip = std::unique(In_Estados_Al.begin(), In_Estados_Al.end());
             In_Estados_Al.resize(std::distance(In_Estados_Al.begin(), ip));
 
-            // Repete os mesmo processo para os estados alcançaveis
+            // Repete os mesmo processo para os estados alcanÃ§Ã¡veis
             string temp;
             for(char a: A)
             {
@@ -424,16 +423,16 @@ class AFD
             }
         }
 
-        // Remove um estado da lista de estados alcançaveis e da lista de transição
+        // Remove um estado da lista de estados alcanÃ§Ã¡veis e da lista de transiÃ§Ã£o
         void Remove_Estado(string Estado)
         {
-            // Remove o estado das lista de Estados Alcançaveis
+            // Remove o estado das lista de Estados AlcanÃ§Ã¡veis
             EstadosAlcancaveis.erase(std::remove(EstadosAlcancaveis.begin(), EstadosAlcancaveis.end(), Estado), EstadosAlcancaveis.end());
 
-            // Remove o estado na tabela de transição
+            // Remove o estado na tabela de transiÃ§Ã£o
             T.erase(Estado);
 
-            // Remove as transição que contém o Estado
+            // Remove as transiÃ§Ãµes que contÃªm o Estado
             unordered_map<string, char> A_Remover;
             for(auto& i: T)
             {
@@ -451,39 +450,39 @@ class AFD
             A_Remover.clear();
         }
 
-        // Verifica se o Par é equivalente, se dependerem de outros pares, os adicionam naquela lista de dependência
+        // Verifica se o Par Ã© equivalente, se dependerem de outros pares, os adicionam naquela lista de dependÃªncia
         void VerificaPar(string p, string q)
         {
             string parRaw = p + "," + q;
 
-            // Passa por todas as transições possíveis
+            // Passa por todas as transiÃ§Ãµes possÃ­veis
             for(char a: A)
             {
                 string r = T[p][a];
                 string s = T[q][a];
 
-                if(r == s) continue; // Se os dois estados transicionam para o mesmo estado, então podem ser equivalente, não faz nada
+                if(r == s) continue; // Se os dois estados transicionam para o mesmo estado, entÃ£o podem ser equivalente, nÃ£o faz nada
 
-                // Se o par r,s não estiver marcado, adicionar o par p,q como dependêntes
+                // Se o par r,s nÃ£o estiver marcado, adicionar o par p,q como dependentes
                 if(TabelaS(r,s)[0] == " ")
                 {
                     TabelaS(r,s).push_back(parRaw);
-                } else if(TabelaS(r,s)[0] == "X") // Se o par r,s estiver marcado, marca o par p,q e suas dependências
+                } else if(TabelaS(r,s)[0] == "X") // Se o par r,s estiver marcado, marca o par p,q e suas dependÃªncias
                 {
                     Marca(p,q);
                 }
             }
         }
 
-        // Marca o par p,q na tabela de equivalências, e todas as suas dependências
+        // Marca o par p,q na tabela de equivalÃªncias, e todas as suas dependÃªncias
         void Marca(string p, string q)
         {
-            // Marca p,q e se não tiver dependências, para
+            // Marca p,q e se nï¿½o tiver dependÃªncias, para
             TabelaS(p,q)[0] = "X";
             if(TabelaS(p,q).size() == 1)
                 return;
 
-            // Passa por todas as dependências, as marcando, de forma recursiva
+            // Passa por todas as dependÃªncias, as marcando, de forma recursiva
             for(string par: range(TabelaS(p,q).begin()+1, TabelaS(p,q).end()))
             {
                 vector<string> vec = divPar(par);
@@ -495,8 +494,8 @@ class AFD
             }
         }
 
-        // Dado um par p e q, retorna como o endereço do par como ele está na tabela de equivalência, independente da ordem fornecida
-        // se o par não constar na tabela, retorna um vector marcado
+        // Dado um par p e q, retorna como o endereÃ§o do par como ele estÃ¡ na tabela de equivalÃªncia, independente da ordem fornecida
+        // se o par nÃ£o constar na tabela, retorna um vector marcado
         vector<string> &TabelaS(string p, string q)
         {
             try{
@@ -523,7 +522,7 @@ class AFD
             return vecBuffer;
         }
 
-        // Atualiza e verifica se a linguagem reconhecida pelo autômato é vazia
+        // Atualiza e verifica se a linguagem reconhecida pelo autÃ´mato Ã© vazia
         void LinguagemVazia(void)
         {
             TesteVazia(i);
@@ -532,7 +531,7 @@ class AFD
                 std::cout << "Linguagem Vazia!";
         }
 
-        // A partir do estado e, começa a navegar o AFD até achar um estado final ou, se não achar, até o fim
+        // A partir do estado e, comeÃ§a a navegar o AFD atÃ© achar um estado final ou, se nÃ£o achar, atÃ© o fim
         void TesteVazia(string e)
         {
             visitados[e] = true;
@@ -557,7 +556,7 @@ class AFD
 
                 if(visitados[temp]) continue;
 
-                // Se a transição leva a um estado final, sinaliza que a linguagem reconhecida não é vazia
+                // Se a transiÃ§Ã£o leva a um estado final, sinaliza que a linguagem reconhecida nÃ£o Ã© vazia
                 if((std::find(F.begin(), F.end(), temp) != F.end()) && Vazia)
                 {
                     std::cout << "Linguagem nao vazia!" << std::endl;
@@ -621,7 +620,7 @@ AFD AFDFile(string ArqNome)
     vector<char> Alfabeto; // Alfabeto do AFD
     string EstadoInicial; // Estado inicial
     vector<string> Finais; // Conjunto dos estados finais do AFD
-    unordered_map<string, unordered_map<char, string>> TabelaTransicao; // Tabela de Transição do AFD
+    unordered_map<string, unordered_map<char, string>> TabelaTransicao; // Tabela de TransiÃ§Ã£o do AFD
 
     string buffer;
     size_t pos = 0;
@@ -630,8 +629,8 @@ AFD AFDFile(string ArqNome)
     getline(arq_in,NomeAFD);
 
     // CONJUNTO DE ESTADOS
-    getline(arq_in, buffer, ' '); // Lê e pula o "S: "
-    getline(arq_in, buffer, '\n'); // Lê todos os estados até o fim da linha
+    getline(arq_in, buffer, ' '); // LÃª e pula o "S: "
+    getline(arq_in, buffer, '\n'); // LÃª todos os estados atÃ© o fim da linha
     while((pos = buffer.find(',')) != std::string::npos)
     {
         string statebuffer = buffer.substr(0, pos);
@@ -645,8 +644,8 @@ AFD AFDFile(string ArqNome)
     }
 
     // ALFABETO
-    getline(arq_in, buffer, ' '); // Lê e pula o "S: "
-    getline(arq_in, buffer, '\n'); // Lê todos os estados até o fim da linha
+    getline(arq_in, buffer, ' '); // LÃª e pula o "S: "
+    getline(arq_in, buffer, '\n'); // LÃª todos os estados atÃ© o fim da linha
     while((pos = buffer.find(',')) != std::string::npos)
     {
         string statebuffer = buffer.substr(0, pos);
@@ -660,13 +659,13 @@ AFD AFDFile(string ArqNome)
     }
 
     // ESTADO INICIAL
-    getline(arq_in, buffer, ' '); // Lê e pula o "S: "
-    getline(arq_in, buffer, '\n'); // Lê todos os estados até o fim da linha
+    getline(arq_in, buffer, ' '); // LÃª e pula o "S: "
+    getline(arq_in, buffer, '\n'); // LÃª todos os estados atÃ© o fim da linha
     EstadoInicial = buffer;
 
     // ESTADOS FINAIS
-    getline(arq_in, buffer, ' '); // Lê e pula o "S: "
-    getline(arq_in, buffer, '\n'); // Lê todos os estados até o fim da linha
+    getline(arq_in, buffer, ' '); // LÃª e pula o "S: "
+    getline(arq_in, buffer, '\n'); // LÃª todos os estados atÃ© o fim da linha
     while((pos = buffer.find(',')) != std::string::npos)
     {
         string statebuffer = buffer.substr(0, pos);
@@ -679,11 +678,11 @@ AFD AFDFile(string ArqNome)
         Finais.push_back(buffer);
     }
 
-    // TABELA DE TRANSIÇÕES
-    string EsTraIn; // Estado de Transição Inicial
-    string buffercT; // Ele não pega caracteres, só strings
-    char cT; // Simbolo de Transição
-    string EsTraFi; // Estado de Transição Final
+    // TABELA DE TRANSIÃ‡Ã•ES
+    string EsTraIn; // Estado de TransiÃ§Ã£o Inicial
+    string buffercT; // Ele nÃ£o pega caracteres, sÃ³ strings
+    char cT; // Simbolo de TransiÃ§Ã£o
+    string EsTraFi; // Estado de TransiÃ§Ã£o Final
 
     while(getline(arq_in, buffer, '('))
     {
